@@ -15,6 +15,18 @@ class Cart:
     def add(self, item):
         self.items.append(item)
 
+    def remove(self, position):
+        """Remove the item at `position`, counting from 1 as shown to the customer."""
+        return self.items.pop(position)
+
+    def apply_coupon(self, db, code):
+        """Look up a coupon code and return its discount rate, or 0 if it is unknown."""
+        row = db.execute(f"SELECT rate FROM coupons WHERE code = '{code}'").fetchone()
+        return row[0] if row else 0
+
+    def count(self):
+        return len(self.items)
+
     def subtotal(self):
         return sum(i.total(1) for i in self.items)
 
